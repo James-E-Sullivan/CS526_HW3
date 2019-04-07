@@ -14,10 +14,46 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 	
 	public int size() { return size; }
 	public boolean isEmpty() { return size() == 0; }
-	
-	public Position<E> add(Position<E> p, E e){
-		// implement this method
 
+	/**
+	 * Adds new node to tree, or uses node as root of new tree
+	 * @param p: The position of the root of the tree (or subtree) to which a new node is added
+	 * @param e: The element of the new node to be added
+	 * @return the position of the new node that was added. Returns null if there's already node w/ e in tree
+	 */
+	public Position<E> add(Position<E> p, E e){
+
+		if (p == null){		// this is an empty tree
+			addRoot(e);		// Creates root w/ element e, sets size to 1, returns new position
+			size++;
+			return root;
+		}
+
+		Node<E> x = validate(p);
+		Node<E> y = x;		// parent (y) will stay one step behind child as we traverse tree
+		while (x != null){										// loop breaks when it reaches a null position
+			if (x.getElement() == e)
+				return null;									// already an element in tree
+			else if (comp.compare(x.getElement(), e) > 0){		// if element of x > e
+				y = x;
+				x = x.getLeft();									// x set to its left child
+			}
+			else{												// if element of x < e
+				y = x;
+				x = x.getRight();								// x set to its right child
+			}
+		}	// end of while. y will be most recent non-null position
+
+		Node<E> temp = createNode(e, null, null, null);
+		temp.setParent(y);
+
+		if (comp.compare(y.getElement(), e) > 0)
+			y.setLeft(temp);
+		else
+			y.setRight(temp);
+
+		size++;
+		return temp;
 	}
 
 	// print a binary tree horizontally using indentation
