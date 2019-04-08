@@ -30,28 +30,28 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 			return root;
 		}
 
-		Node<E> x = validate(p);
-		Node<E> y = x;		// parent (y) will stay one step behind child (x) as we traverse tree
-		while (x != null){										// loop breaks when it reaches a null position
-			if (x.getElement() == e)
-				return null;									// already an element in tree
-			else if (comp.compare(x.getElement(), e) > 0){		// if element of x > e
-				y = x;
-				x = x.getLeft();								// x set to its left child
+		Node<E> child = validate(p);
+		Node<E> parent = child;		// parent will stay one step behind child as we traverse tree
+		while (child != null){										// loop breaks when it reaches a null position
+			if (child.getElement() == e)
+				return null;										// already an element in tree
+			else if (comp.compare(child.getElement(), e) > 0){		// if element of x > e
+				parent = child;
+				child = child.getLeft();							// x set to its left child
 			}
-			else{												// if element of x < e
-				y = x;
-				x = x.getRight();								// x set to its right child
+			else{													// if element of x < e
+				parent = child;
+				child = child.getRight();							// x set to its right child
 			}
 		}	// end of while. y will be most recent non-null position
 
-		Node<E> temp = createNode(e, null, null, null);
-		temp.setParent(y);
+		Node<E> temp = createNode(e, null, null, null);		// new node with element e
+		temp.setParent(parent);													// node's parent set to y
 
-		if (comp.compare(y.getElement(), e) > 0)
-			y.setLeft(temp);
+		if (comp.compare(parent.getElement(), e) > 0)				// if temp < parent
+			parent.setLeft(temp);									// set parent's left child to temp
 		else
-			y.setRight(temp);
+			parent.setRight(temp);									// else set parent's right to temp
 
 		size++;
 		return temp;
@@ -104,7 +104,7 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
         int e;
         Random r = new Random();
         r.setSeed(System.currentTimeMillis());
-        e = r.nextInt(1000000);
+        e = r.nextInt(1000000);			// random int w/ 1000000 upper bound
         return e;
     }
 	
@@ -132,27 +132,24 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 		t.inorderPrint(t.root);
 
 		System.out.println("\n");
-		
-		// average height experiment
-		// you need to complete this part
 
-        int heightSum = 0;
+        int heightSum = 0;						// int used to sum the height of all trees
         int i;
-        for (i=1; i <= 100; i++){
+        for (i=1; i <= 100; i++){				// create 100 trees
             int j;
             MyBST<Integer> avgHeightTree = new MyBST<>();
-            for (j=0; j < 1000; j++){
+            for (j=0; j < 1000; j++){									// fill each tree with 1000 nodes
                 Integer randomNumber = getRandomInt();
-                avgHeightTree.add(avgHeightTree.root, randomNumber);
+                avgHeightTree.add(avgHeightTree.root, randomNumber);	// each node element is pseudo-random number
             }
 
-            int maxHeight = avgHeightTree.height(avgHeightTree.root);
+            int maxHeight = avgHeightTree.height(avgHeightTree.root);	// height is max depth of Tree, from root
 
             System.out.println("Height = " + maxHeight + ", " + "Size = " + avgHeightTree.size);
-            heightSum += maxHeight;
+            heightSum += maxHeight;		// add height of tree to the previous sum of all tree heights
         }
 
-        double avgHeight = (double) heightSum / i;
+        double avgHeight = (double) heightSum / i;						// average height of the 100 trees
         System.out.println("\nAverage height = " + avgHeight +
                 " // this is the average of " + (i-1) + " heights");
 
