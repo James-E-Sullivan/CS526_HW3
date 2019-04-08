@@ -2,6 +2,7 @@
 
 import net.datastructures.*; // modify this appropriately
 import java.util.Comparator;
+import java.util.Random;
 
 // generic binary search tree
 public class MyBST<E> extends LinkedBinaryTree<E> {
@@ -30,13 +31,13 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 		}
 
 		Node<E> x = validate(p);
-		Node<E> y = x;		// parent (y) will stay one step behind child as we traverse tree
+		Node<E> y = x;		// parent (y) will stay one step behind child (x) as we traverse tree
 		while (x != null){										// loop breaks when it reaches a null position
 			if (x.getElement() == e)
 				return null;									// already an element in tree
 			else if (comp.compare(x.getElement(), e) > 0){		// if element of x > e
 				y = x;
-				x = x.getLeft();									// x set to its left child
+				x = x.getLeft();								// x set to its left child
 			}
 			else{												// if element of x < e
 				y = x;
@@ -93,6 +94,19 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 		System.out.print(n.getElement() + "  ");
 		inorderPrint(n.getRight());
 	}
+
+
+    /**
+     * Creates pseudo-random int (e) between 0 and 1000000
+     * @return int e
+     */
+	private static int getRandomInt(){
+        int e;
+        Random r = new Random();
+        r.setSeed(System.currentTimeMillis());
+        e = r.nextInt(1000000);
+        return e;
+    }
 	
 	public static void main(String[] args) {
 		
@@ -121,6 +135,26 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 		
 		// average height experiment
 		// you need to complete this part
+
+        int heightSum = 0;
+        int i;
+        for (i=1; i <= 100; i++){
+            int j;
+            MyBST<Integer> avgHeightTree = new MyBST<>();
+            for (j=0; j < 1000; j++){
+                Integer randomNumber = getRandomInt();
+                avgHeightTree.add(avgHeightTree.root, randomNumber);
+            }
+
+            int maxHeight = avgHeightTree.height(avgHeightTree.root);
+
+            System.out.println("Height = " + maxHeight + ", " + "Size = " + avgHeightTree.size);
+            heightSum += maxHeight;
+        }
+
+        double avgHeight = (double) heightSum / i;
+        System.out.println("\nAverage height = " + avgHeight +
+                " // this is the average of " + (i-1) + " heights");
 
 	}
 
