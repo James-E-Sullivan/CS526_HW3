@@ -100,10 +100,8 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
      * Creates pseudo-random int (e) between 0 and 1000000
      * @return int e
      */
-	private static int getRandomInt(){
+	private static int getRandomInt(Random r){
         int e;
-        Random r = new Random();
-        r.setSeed(System.currentTimeMillis());
         e = r.nextInt(1000000);			// random int w/ 1000000 upper bound
         return e;
     }
@@ -133,13 +131,18 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
 
 		System.out.println("\n");
 
+
+		Random r = new Random();					// instantiate new Random object
+		r.setSeed(System.currentTimeMillis());		// set seed based on current system time
+
+
         int heightSum = 0;						// int used to sum the height of all trees
         int i;
         for (i=1; i <= 100; i++){				// create 100 trees
             int j;
             MyBST<Integer> avgHeightTree = new MyBST<>();
             for (j=0; j < 1000; j++){									// fill each tree with 1000 nodes
-                Integer randomNumber = getRandomInt();
+                Integer randomNumber = getRandomInt(r);					// get random number
                 avgHeightTree.add(avgHeightTree.root, randomNumber);	// each node element is pseudo-random number
             }
 
@@ -152,7 +155,6 @@ public class MyBST<E> extends LinkedBinaryTree<E> {
         double avgHeight = (double) heightSum / i;						// average height of the 100 trees
         System.out.println("\nAverage height = " + avgHeight +
                 " // this is the average of " + (i-1) + " heights");
-
 	}
 
 }
